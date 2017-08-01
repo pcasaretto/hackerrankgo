@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -11,9 +12,9 @@ func main() {
 	res := reduce(string(b))
 	if len(res) > 0 {
 		fmt.Println(res)
-		return
+	} else {
+		fmt.Println("Empty String")
 	}
-	fmt.Println("Empty String")
 }
 
 func reduce(s string) string {
@@ -27,11 +28,17 @@ func reduce(s string) string {
 	return join(left, right)
 }
 
+var b bytes.Buffer
+
 func join(left, right string) string {
 	// log.Println("join", left, right)
 	leftLen := len(left)
 	if leftLen > 0 && len(right) > 0 && left[leftLen-1] == right[0] {
 		return join(left[:leftLen-1], right[1:])
 	}
-	return left + right
+
+	b.Reset()
+	b.WriteString(left)
+	b.WriteString(right)
+	return b.String()
 }
